@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SmartMail AI</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="background"></div>
+
+    <div class="container">
+
+        <div class="header">
+            <h1>SmartMail AI</h1>
+
+            <p>
+                AI Powered Email Classification
+                & Tone Rewriting
+            </p>
+        </div>
+
+
+        <div class="feature-boxes">
+
+            <div class="feature-card">
+                ✉️ Email Classification
+            </div>
+
+            <div class="feature-card">
+                🤖 AI Tone Rewriting
+            </div>
+
+            <div class="feature-card">
+                🔒 Secure Processing
+            </div>
+
+        </div>
+
+
+        <textarea
+            id="emailText"
+            placeholder="Paste your email here..."
+        ></textarea>
+
+
+        <div class="buttons">
+
+            <button
+                type="button"
+                onclick="classifyEmail()"
+            >
+                Classify Email
+            </button>
+
+            <button
+                type="button"
+                onclick="rewriteEmail()"
+            >
+                Rewrite Email
+            </button>
+
+        </div>
+
+
+        <div class="result">
+
+            <h2>AI Result</h2>
+
+            <div id="output">
+                Results will appear here...
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+<script>
+
+async function classifyEmail() {
+
+    const text =
+    document.getElementById("emailText").value;
+
+    const output =
+    document.getElementById("output");
+
+    try {
+
+        const response =
+        await fetch(
+            "http://localhost:8000/users/classify?text=" +
+            encodeURIComponent(text),
+            {
+                method: "POST"
+            }
+        );
+
+        const data =
+        await response.json();
+
+        output.innerHTML =
+        "<h3>Category</h3><p>" +
+        data.category +
+        "</p>";
+    }
+
+    catch(error) {
+
+        output.innerHTML =
+        "<p>Classification failed.</p>";
+    }
+}
+
+
+
+async function rewriteEmail() {
+
+    const text =
+    document.getElementById("emailText").value;
+
+    const output =
+    document.getElementById("output");
+
+    try {
+
+        const response =
+        await fetch(
+            "http://localhost:8000/users/rewrite?text=" +
+            encodeURIComponent(text),
+            {
+                method: "POST"
+            }
+        );
+
+        const data =
+        await response.json();
+
+        output.innerHTML =
+        "<h3>Category</h3>" +
+        "<p>" + data.category + "</p>" +
+
+        "<h3>Professional Version</h3>" +
+        "<pre>" + data.professional + "</pre>" +
+
+        "<h3>Friendly Version</h3>" +
+        "<pre>" + data.friendly + "</pre>";
+    }
+
+    catch(error) {
+
+        output.innerHTML =
+        "<p>Rewrite failed.</p>";
+    }
+}
+
+</script>
+
+</body>
+
+</html>
